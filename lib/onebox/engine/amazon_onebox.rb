@@ -9,11 +9,11 @@ module Onebox
         http
         maybe("www.")
         domain("amazon")
-        has(".").either("com", "ca").maybe("/")
+        has(".").either("com.br","com", "ca", "cn", "fr", "de", "es", "it", "co.jp", "co.uk").maybe("/")
       end
 
-      def url
-        return "http://www.amazon.com/gp/aw/d/" + URI::encode(match[:id]) if match && match[:id]
+      def url 
+        return "http://" + URI::encode(match[:domain]) + "/gp/aw/d/" + URI::encode(match[:id]) if match && match[:id]
         @url
       end
 
@@ -24,9 +24,9 @@ module Onebox
       private
 
       def match
-        @match ||= @url.match(/(?:d|g)p\/(?:product\/)?(?<id>[^\/]+)(?:\/|$)/mi)
+        @match ||= @url.match(/(?:domain(com.br|com|ca|cn|fr|de|es|it|co.jp|co.uk))(?:d|g)p\/(?:product\/)?(?<id>[^\/]+)(?:\/|$)/mi)
       end
-
+      
       def image
         case
         when raw.css("#main-image").any?
